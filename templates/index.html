@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Next Word Prediction</title>
+    <style>
+        body {
+            background-color: #bfe6ff; /* Custom brighter blue background */
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            color: #333;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            margin-bottom: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            font-size: 1.2em;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 1em;
+            width: calc(100% - 85px);
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            background-color: #4CAF50; /* Green */
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #prediction-result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+        }
+        #search-again {
+            display: none;
+            margin-top: 20px;
+        }
+        .history {
+            margin-top: 30px;
+        }
+        .history h2 {
+            margin-bottom: 10px;
+        }
+        .history-list {
+            list-style-type: none;
+            padding: 0;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+        .history-list li {
+            margin-bottom: 5px;
+        }
+        .clear-history {
+            margin-top: 10px;
+            cursor: pointer;
+            color: #4CAF50;
+        }
+        .clear-history:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Next Word Prediction</h1>
+        <form id="prediction-form">
+            <label for="input_text">Enter Text:</label>
+            <input type="text" id="input_text" name="input_text">
+            <button type="submit">Predict Next Word</button>
+        </form>
+        <div id="prediction-result"></div>
+        <button id="search-again" onclick="searchAgain()">Search Again</button>
+
+        <div class="history">
+            <h2>Search History</h2>
+            <ul class="history-list" id="history-list">
+                <!-- History items will be dynamically added here -->
+            </ul>
+            <div class="clear-history" onclick="clearHistory()">Clear History</div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('prediction-form');
+        const predictionResult = document.getElementById('prediction-result');
+        const searchAgainButton = document.getElementById('search-again');
+        const historyList = document.getElementById('history-list');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const inputText = document.getElementById('input_text').value;
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'input_text': inputText
+                })
+            });
+            const result = await response.json();
+            predictionResult.innerText = `Next word: ${result.next_word}`;
+            searchAgainButton.style.display = 'block';
+            addToHistory(inputText);
+        });
+
+        function searchAgain() {
+            predictionResult.innerText = '';
+            document.getElementById('input_text').value = '';
+            searchAgainButton.style.display = 'none';
+        }
+
+        function addToHistory(text) {
+            const listItem = document.createElement('li');
+            listItem.textContent = text;
+            historyList.prepend(listItem); // Add new item to the beginning of the list
+        }
+
+        function clearHistory() {
+            historyList.innerHTML = ''; // Clear all items in the history list
+        }
+    </script>
+</body>
+</html>

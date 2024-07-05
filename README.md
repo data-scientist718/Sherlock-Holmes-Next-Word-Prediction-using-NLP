@@ -36,10 +36,10 @@ This project aims to develop a robust Next Word Prediction model using the Sherl
 
 ## Files
 
-- `train_model.py`: Script for data preprocessing, model training, and saving.
+- `Sherlock_Holmes_Next_Word_Prediction.IPYNB`: Script for data preprocessing, model training, and saving.
 - `app.py`: Flask application for next word prediction.
 - `templates/index.html`: HTML template for the web interface.
-- `sherlock_holmes.txt`: Text dataset.
+- `sherlock-holm.es_stories_plain-text_advs.txt`: Text dataset.
 
 ## Summary and Conclusion
 
