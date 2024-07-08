@@ -26,7 +26,7 @@ This project aims to develop a robust Next Word Prediction model using the Sherl
 
 1. **Train the model**: Run the script to preprocess the data, build, and train the model.
     ```bash
-    python train_model.py
+    python Sherlock_Holmes_Next_Word_Prediction.IPYNB
     ```
 2. **Run the Flask application**:
     ```bash
